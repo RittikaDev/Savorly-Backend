@@ -1,26 +1,28 @@
 import { Document, Types } from 'mongoose';
 
 export interface IOrder extends Document {
-  user: Types.ObjectId;
-  products: {
-    product: Types.ObjectId;
-    quantity: number;
-  }[];
+  customerId: Types.ObjectId;
+  mealId: Types.ObjectId;
+  providerId: Types.ObjectId;
+  quantity: number;
+  dietaryPreferences?: string[]; // Example: ['vegan', 'gluten-free']
+  status: 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
+  scheduledDelivery: Date;
   totalPrice: number;
-  status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
-  transaction: {
-    id: string;
-    transactionStatus: string;
-    bank_status: string;
-    sp_code: string;
-    sp_message: string;
-    method: string;
-    date_time: string;
+  address: string;
+  transaction?: {
+    id?: string;
+    transactionStatus?: string;
+    bank_status?: string;
+    sp_code?: string;
+    sp_message?: string;
+    method?: string; // E.g., 'SurjoPay', 'Credit Card', etc.
+    date_time?: Date;
   };
   isPaid: boolean;
-  cancelledAt: Date;
-  updatedStatus: string; // For tracking status changes
-  deliveryDate: string;
+  cancelledAt?: Date;
+  updatedStatus?: string;
+  deliveryDate?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

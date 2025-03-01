@@ -13,7 +13,6 @@ import { JwtPayload } from 'jsonwebtoken';
 
 const createOrder = async (
   user: JwtPayload,
-  // payload: { products: { product: string; quantity: number }[] },
   payload: {
     products: { product: string; quantity: number }[];
     address?: {
@@ -37,7 +36,7 @@ const createOrder = async (
         if (product.stock < item.quantity) {
           throw new AppError(
             httpStatus.BAD_REQUEST,
-            'Product is stock out, can not place an order',
+            'Meal is stock out, can not place an order',
           );
         }
         const subtotal = product ? (product.price || 0) * item.quantity : 0;
@@ -175,7 +174,7 @@ const cancelOrder = async (orderId: string) => {
 
   if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
 
-  if (order.status === 'Shipped' || order.status === 'Delivered') {
+  if (order.status === 'Delivered') {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       'Cannot cancel an order that is already shipped or delivered',
@@ -189,25 +188,14 @@ const cancelOrder = async (orderId: string) => {
   return order;
 };
 
-type OrderStatus =
-  | 'Pending'
-  | 'Processing'
-  | 'Shipped'
-  | 'Delivered'
-  | 'Cancelled';
+type OrderStatus = 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
 
 const updateOrderStatus = async (
   orderId: string,
   status: OrderStatus,
   deliveryDate: string,
 ) => {
-  const validStatuses = [
-    'Pending',
-    'Processing',
-    'Shipped',
-    'Delivered',
-    'Cancelled',
-  ];
+  const validStatuses = ['Pending', 'In progress', 'Delivered', 'Cancelled'];
 
   if (!validStatuses.includes(status))
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid status');
