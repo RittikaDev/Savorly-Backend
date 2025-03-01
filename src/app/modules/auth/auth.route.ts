@@ -12,11 +12,12 @@ router.post(
   validateRequest(UserValidations.CreateUserValidationSchema),
   AuthControllers.createUser,
 );
-router.post(
-  '/login',
-  validateRequest(UserValidations.CreateUserValidationSchema),
-  AuthControllers.registerUser,
-);
+router.post('/login', AuthControllers.loginUser);
+// router.post(
+//   '/login',
+//   validateRequest(UserValidations.CreateUserValidationSchema),
+//   AuthControllers.registerUser,
+// );
 
 // router.post(
 //   '/login',

@@ -46,6 +46,28 @@ const registerUser = catchAsync(async (req, res) => {
   });
 });
 
+const loginUser = catchAsync(async (req, res) => {
+  const result = await AuthService.loginUser(req.body);
+  const { refreshToken, accessToken } = result;
+
+  res.cookie('refreshToken', refreshToken, {
+    secure: config.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24 * 365,
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User logged in successfully!',
+    data: {
+      accessToken,
+      refreshToken,
+    },
+  });
+});
+
 // login user
 // const signInUser = catchAsync(async (req, res) => {
 //   console.log(req.body);
@@ -70,7 +92,7 @@ const registerUser = catchAsync(async (req, res) => {
 // });
 
 const getCurrentUser = catchAsync(async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const user = await AuthService.getCurrentUser(req.body);
   sendResponse(res, {
     success: true,
@@ -109,6 +131,7 @@ export const AuthControllers = {
   createUser,
 
   registerUser,
+  loginUser,
 
   // signInUser,
 

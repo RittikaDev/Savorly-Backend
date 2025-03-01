@@ -23,9 +23,8 @@ const auth = (...requiredRoles: TRole[]) => {
     // SPLIT TOKEN FROM BEARER
     const token = authHeader.split(' ')[1];
 
-    if (!token) {
+    if (!token)
       throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
-    }
 
     const decoded = jwt.verify(
       token as string,
@@ -34,12 +33,10 @@ const auth = (...requiredRoles: TRole[]) => {
     // console.log('Token Expiry:', new Date(Number(decoded?.exp) * 1000));
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    const { role, userEmail, iat } = decoded;
+    const { role, email, iat } = decoded;
 
-    const user = await User.isUserExistByEmail(userEmail);
-    if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
-    }
+    const user = await User.isUserExistByEmail(email);
+    if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
 
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(

@@ -11,4 +11,5 @@ export interface IMeal extends Document {
   providerId: Types.ObjectId; // REFERENCE TO MEAL PROVIDER
   availability: boolean;
   rating: number; // RATING BASED ON CUSTOMER REVIEWS
+  image: string[];
 }

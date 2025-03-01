@@ -28,7 +28,7 @@ app.use(
 app.use('/api/', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Car Store api server!');
+  res.send('Welcome to Savorly api server!');
 });
 
 app.use(globalErrorHandler);

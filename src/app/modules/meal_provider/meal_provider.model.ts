@@ -54,5 +54,7 @@ const MealProviderSchema = new Schema<IMealProvider>(
   },
 );
 
-const MealProvider = model<IMealProvider>('MealProvider', MealProviderSchema);
-export default MealProvider;
+export const MealProvider = model<IMealProvider>(
+  'MealProvider',
+  MealProviderSchema,
+);

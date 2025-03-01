@@ -18,10 +18,9 @@ const MealSchema = new Schema<IMeal>(
     },
     availability: { type: Boolean, default: true },
     rating: { type: Number, min: 0, max: 5, default: 0 },
+    image: { type: [String], default: [] },
   },
   { timestamps: true },
 );
 
-const MealModel = model<IMeal>('Meal', MealSchema);
-
-export default MealModel;
+export const MealModel = model<IMeal>('Meal', MealSchema);

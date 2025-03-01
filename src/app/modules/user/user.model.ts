@@ -31,7 +31,7 @@ const UserSchema = new Schema<TUser>(
     city: { type: String, default: 'N/A' },
     role: {
       type: String,
-      enum: ['admin', 'user'],
+      enum: ['admin', 'user', 'provider'],
       default: 'user',
     },
     isBlocked: {

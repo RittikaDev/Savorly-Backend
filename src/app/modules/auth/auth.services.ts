@@ -76,22 +76,20 @@ const registerUser = async (userData: TUser) => {
 const loginUser = async (payload: any) => {
   try {
     const user = await User.isUserExistByEmail(payload.email);
-    if (!user) {
+    if (!user)
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
-    }
 
-    if (user.isBlocked) {
+    if (user.isBlocked)
       throw new AppError(httpStatus.FORBIDDEN, 'This user is not active!');
-    }
-    console.log(payload.password, user, user?.password);
+
+    // console.log(payload.password, user, user?.password);
     if (
       !(await User.isPasswordMatched(
         payload.password as string,
         user?.password as string,
       ))
-    ) {
+    )
       throw new AppError(httpStatus.FORBIDDEN, 'Password does not match');
-    }
 
     const jwtPayload: IJwtPayload = {
       userId: user._id as string,
