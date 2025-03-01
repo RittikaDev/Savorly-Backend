@@ -5,6 +5,7 @@ import { AuthRoutes } from '../modules/auth/auth.route';
 import { UserRoute } from '../modules/user/user.route';
 import { MealRoute } from '../modules/meal/meal.route';
 import { MealProviderRoutes } from '../modules/meal_provider/meal_provider.route';
+import { MealPreferenceRoute } from '../modules/meal_preference/meal_preference.route';
 
 const router = Router();
 
@@ -20,6 +21,10 @@ const moduleRoutes = [
   {
     path: '/meal-provider',
     route: MealProviderRoutes,
+  },
+  {
+    path: '/meal-preference',
+    route: MealPreferenceRoute,
   },
   {
     path: '/cars',

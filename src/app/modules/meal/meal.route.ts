@@ -9,6 +9,7 @@ import { MealValidationSchema } from './meal.validation';
 const router = express.Router();
 
 router.get('/', MealController.getAllMeals);
+router.get('/:userId/preffered', MealController.getPreferredMeals);
 router.post(
   '/:providerId/create',
   auth(USER_ROLE.provider),

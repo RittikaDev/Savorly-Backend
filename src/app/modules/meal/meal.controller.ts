@@ -35,7 +35,22 @@ const getAllMeals = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getPreferredMeals = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const { paginationMetaData, result } =
+    await MealService.getPreferredMealsFromDB(userId, req.query);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Preferred meals retrieved successfully',
+    paginationMetaData,
+    data: result,
+  });
+});
+
 export const MealController = {
   createAMeal,
   getAllMeals,
+  getPreferredMeals,
 };

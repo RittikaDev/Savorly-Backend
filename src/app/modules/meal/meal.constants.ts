@@ -5,5 +5,11 @@ export const searchableFields = [
   'rating',
   'availability',
 ];
+export const preferredFields = [
+  'name',
+  'cuisineType',
+  'dietaryPreferences',
+  'portionSize',
+];
 
 export const searchableUsers = ['name', 'email'];
