@@ -10,6 +10,9 @@ const router = express.Router();
 
 router.get('/', MealController.getAllMeals);
 
+router.get('/cusine', MealController.getAllCuisine);
+router.get('/dieteryPreference', MealController.getDietaryPreference);
+
 router.get(
   '/provider-meals',
   auth(USER_ROLE.provider),

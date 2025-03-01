@@ -142,6 +142,30 @@ export const getPreferredMealsFromDB = async (
   return { result, paginationMetaData };
 };
 
+// GET MEALS BASED ON CUISINE, DIETERY PREFERENCE, RATINGS AND AVAILABILITY
+const getAllCuisine = async () => {
+  const uniqueCuisines = await MealModel.distinct('cuisineType'); // Get distinct cuisines
+  return {
+    meta: { total: uniqueCuisines.length }, // Meta info with total unique cuisines
+    result: uniqueCuisines,
+  };
+};
+const getDietaryPreference = async () => {
+  const uniqueDietaryPreferences = await MealModel.aggregate([
+    { $unwind: '$dietaryPreferences' }, // Flatten the array
+    { $group: { _id: '$dietaryPreferences' } }, // Group by unique values
+    { $sort: { _id: 1 } }, // Sort alphabetically
+    { $project: { _id: 0, dietaryPreference: '$_id' } }, // Restructure output
+  ]);
+
+  console.log('Diet Pre', uniqueDietaryPreferences);
+
+  return {
+    meta: { total: uniqueDietaryPreferences.length },
+    result: uniqueDietaryPreferences.map((d) => d.dietaryPreference), // Extract values
+  };
+};
+
 export const MealService = {
   createMealMenu,
 
@@ -151,4 +175,7 @@ export const MealService = {
   getAllMealsFromDB,
   getProviderSpecificMeals,
   getPreferredMealsFromDB,
+
+  getAllCuisine,
+  getDietaryPreference,
 };

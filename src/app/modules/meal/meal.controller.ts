@@ -104,6 +104,31 @@ const getPreferredMeals = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllCuisine = catchAsync(async (req, res) => {
+  const result = await MealService.getAllCuisine();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Cuisine Types  are retrieved successfully',
+    paginationMetaData: result.meta,
+    data: result.result,
+  });
+});
+
+const getDietaryPreference = catchAsync(async (req, res) => {
+  const result = await MealService.getDietaryPreference();
+  console.log(result);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Dietery Preferred meals are retrieved successfully',
+    paginationMetaData: result.meta,
+    data: result.result,
+  });
+});
+
 export const MealController = {
   createAMeal,
 
@@ -113,4 +138,7 @@ export const MealController = {
   getAllMeals,
   getProviderSpecificMeals,
   getPreferredMeals,
+
+  getAllCuisine,
+  getDietaryPreference,
 };
