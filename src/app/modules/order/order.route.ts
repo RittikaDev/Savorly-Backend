@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route('/')
   .post(auth(USER_ROLE.user), OrderController.createOrder)
-  .get(auth(USER_ROLE.admin), OrderController.getAllOrders);
+  .get(auth(USER_ROLE.provider), OrderController.getAllOrders);
 
 router.get('/verify', auth(USER_ROLE.user), OrderController.verifyPayment);
 router.get('/my-bookings', auth(USER_ROLE.user), OrderController.getUserOrders);
@@ -21,13 +21,13 @@ router.patch(
 );
 
 router.delete(
-  '/:orderId/delete-order',
-  auth(USER_ROLE.admin),
+  '/:orderId/:providerIddelete-order',
+  auth(USER_ROLE.provider),
   OrderController.deleteSelectedOrder,
 );
 router.patch(
-  '/:orderId/status',
-  auth(USER_ROLE.admin),
+  '/:orderId/:providerId/status',
+  auth(USER_ROLE.provider),
   OrderController.updateOrderStatus,
 );
 

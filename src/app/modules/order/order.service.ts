@@ -11,6 +11,7 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import httpStatus from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import { MealModel } from '../meal/meal.model';
+import { MealProvider } from '../meal_provider/meal_provider.model';
 
 const createOrder = async (
   user: JwtPayload,
@@ -145,9 +146,17 @@ const verifyPayment = async (order_id: string) => {
 };
 
 // GET ALL ORDERS : ADMIN
-const getAllOrders = async (query: Record<string, unknown>) => {
+const getAllOrders = async (
+  providerData: JwtPayload,
+  query: Record<string, unknown>,
+) => {
+  const user = await User.findOne({ email: providerData.email });
+  if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+
   const orderQuery = new QueryBuilder(
-    OrderModel.find({}).populate('user').populate('meals.meal'),
+    OrderModel.find({ providerId: user._id })
+      .populate('customerId')
+      .populate('mealId'),
     query,
   )
     .filter()
@@ -166,11 +175,13 @@ const getUserOrders = async (
   userData: JwtPayload,
   query: Record<string, unknown>,
 ) => {
-  const user = await User.findOne({ email: userData.userEmail });
+  const user = await User.findOne({ email: userData.email });
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
   const userBookingQuery = new QueryBuilder(
-    OrderModel.find({ user: user._id }).populate('user').populate('meals.meal'),
+    OrderModel.find({ user: user._id })
+      .populate('customerId')
+      .populate('mealId'),
     query,
   )
     .filter()
@@ -207,6 +218,7 @@ type OrderStatus = 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
 
 const updateOrderStatus = async (
   orderId: string,
+  providerId: string,
   status: OrderStatus,
   deliveryDate: string,
 ) => {
@@ -215,7 +227,7 @@ const updateOrderStatus = async (
   if (!validStatuses.includes(status))
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid status');
 
-  const order = await OrderModel.findById(orderId);
+  const order = await OrderModel.findById({ _id: orderId, providerId });
 
   if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
 
@@ -228,13 +240,16 @@ const updateOrderStatus = async (
   return order;
 };
 
-const deleteSelectedOrder = async (id: string) => {
-  const isOrderExists = await OrderModel.findById(id);
+const deleteSelectedOrder = async (orderId: string, providerId: string) => {
+  const isOrderExists = await OrderModel.findById(orderId);
 
   if (!isOrderExists)
     throw new AppError(httpStatus.BAD_REQUEST, 'Order does not exist');
 
-  const deletedOrder = await OrderModel.findByIdAndDelete(id);
+  const deletedOrder = await OrderModel.findByIdAndDelete({
+    _id: orderId,
+    providerId,
+  });
 
   return deletedOrder;
 };

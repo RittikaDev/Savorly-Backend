@@ -14,7 +14,7 @@ const changePassword = async (
   payload: { oldPassword: string; newPassword: string },
 ) => {
   // checking if the user is exist
-  const user = await User.isUserExistByEmail(userData.userEmail);
+  const user = await User.isUserExistByEmail(userData.email);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -48,7 +48,7 @@ const changePassword = async (
 
   await User.findOneAndUpdate(
     {
-      email: userData.userEmail,
+      email: userData.email,
       role: userData.role,
     },
     {
@@ -61,13 +61,14 @@ const changePassword = async (
 };
 
 const updateProfile = async (userData: JwtPayload, payload: TUser) => {
-  const user = await User.isUserExistByEmail(userData.userEmail);
+  const user = await User.isUserExistByEmail(userData.email);
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
-
+  // console.log(payload);
   const updatedUser = await User.findByIdAndUpdate(user._id, payload, {
     new: true,
     runValidators: true,
   });
+  if (!updatedUser) throw new AppError(httpStatus.BAD_REQUEST, 'Update failed');
 
   return updatedUser;
 };

@@ -10,14 +10,14 @@ const router = express.Router();
 
 router.post(
   '/update-password',
-  auth(USER_ROLE.user),
+  auth(USER_ROLE.user, USER_ROLE.provider),
   validateRequest(UserValidations.changePasswordValidationSchema),
   UserController.changePassword,
 );
 
 router.patch(
   '/update-profile',
-  auth(USER_ROLE.user, USER_ROLE.admin),
+  auth(USER_ROLE.user, USER_ROLE.provider),
   validateRequest(UserValidations.UpdateUserValidationSchema),
   UserController.updateProfile,
 );

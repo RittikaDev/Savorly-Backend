@@ -42,8 +42,10 @@ const verifyPayment = catchAsync(async (req, res) => {
 const getAllOrders = catchAsync(async (req, res) => {
   const newQuery = { ...req.query };
 
-  const { paginationMetaData, result } =
-    await OrderService.getAllOrders(newQuery);
+  const { paginationMetaData, result } = await OrderService.getAllOrders(
+    req.user!,
+    newQuery,
+  );
 
   sendResponse(res, {
     success: true,
@@ -91,13 +93,14 @@ const cancelOrder = catchAsync(async (req, res) => {
   });
 });
 const updateOrderStatus = catchAsync(async (req, res) => {
-  const { orderId } = req.params;
+  const { orderId, providerId } = req.params;
   const { status, deliveryDate } = req.body;
 
   const parsedDeliveryDate = deliveryDate ? new Date(deliveryDate) : null;
 
   const updatedOrder = await OrderService.updateOrderStatus(
     orderId,
+    providerId,
     status,
     parsedDeliveryDate?.toString()!,
   );
@@ -105,14 +108,14 @@ const updateOrderStatus = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
-    message: 'Order placed successfully',
+    message: 'Order status updated',
     data: updatedOrder,
   });
 });
 
 const deleteSelectedOrder = catchAsync(async (req: Request, res: Response) => {
-  const { orderId } = req.params;
-  const result = await OrderService.deleteSelectedOrder(orderId);
+  const { orderId, providerId } = req.params;
+  const result = await OrderService.deleteSelectedOrder(orderId, providerId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

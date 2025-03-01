@@ -9,12 +9,33 @@ import { MealValidationSchema } from './meal.validation';
 const router = express.Router();
 
 router.get('/', MealController.getAllMeals);
+
+router.get(
+  '/provider-meals',
+  auth(USER_ROLE.provider),
+  MealController.getProviderSpecificMeals,
+);
+
 router.get('/:userId/preffered', MealController.getPreferredMeals);
+
 router.post(
   '/:providerId/create',
   auth(USER_ROLE.provider),
   validateRequest(MealValidationSchema.CreateMealValidationSchema),
   MealController.createAMeal,
+);
+
+router.put(
+  '/:mealId/:providerId',
+  auth(USER_ROLE.provider),
+  validateRequest(MealValidationSchema.UpdateMealValidationSchema),
+  MealController.updateMealMenu,
+);
+router.delete(
+  '/:mealId/:providerId',
+  auth(USER_ROLE.provider),
+  validateRequest(MealValidationSchema.UpdateMealValidationSchema),
+  MealController.deleteMealMenu,
 );
 
 export const MealRoute = router;
