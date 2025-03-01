@@ -12,7 +12,7 @@ const CreateOrderValidationSchema = z.object({
       .default('Pending'),
     scheduledDelivery: z.coerce.date(), // Ensures it's a valid date
     totalPrice: z.number().positive(),
-    address: z.string().min(5, 'Address is required'),
+    address: z.string().min(5, 'Address is required').optional(),
     transaction: z
       .object({
         id: z.string().optional(),

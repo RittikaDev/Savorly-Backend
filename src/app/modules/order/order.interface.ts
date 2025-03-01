@@ -4,7 +4,7 @@ export interface IOrder extends Document {
   customerId: Types.ObjectId;
   mealId: Types.ObjectId;
   providerId: Types.ObjectId;
-  quantity: number;
+  quantity: [number];
   dietaryPreferences?: string[]; // Example: ['vegan', 'gluten-free']
   status: 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
   scheduledDelivery: Date;

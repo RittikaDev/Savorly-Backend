@@ -10,48 +10,50 @@ import QueryBuilder from '../../builder/QueryBuilder';
 
 import httpStatus from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
+import { MealModel } from '../meal/meal.model';
 
 const createOrder = async (
   user: JwtPayload,
   payload: {
-    products: { product: string; quantity: number }[];
+    meals: { meal: string; quantity: number }[];
     address?: {
       address: string;
       city: string;
       phone: string;
     };
+    scheduledDelivery: Date;
+    providerId: string;
   },
   client_ip: string,
 ) => {
-  if (!payload?.products?.length)
+  if (!payload?.meals?.length)
     throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Order is not specified');
 
-  const products = payload.products;
+  const meals = payload.meals;
 
   let totalPrice = 0;
-  const productDetails = await Promise.all(
-    products.map(async (item) => {
-      const product = await CarModel.findById(item.product);
-      if (product) {
-        if (product.stock < item.quantity) {
+  const mealDetails = await Promise.all(
+    meals.map(async (item) => {
+      const meal = await MealModel.findById(item.meal);
+      if (meal) {
+        if (!meal.availability) {
           throw new AppError(
             httpStatus.BAD_REQUEST,
-            'Meal is stock out, can not place an order',
+            'Meal is not available, can not place an order',
           );
         }
-        const subtotal = product ? (product.price || 0) * item.quantity : 0;
+        const subtotal = (meal.price || 0) * item.quantity;
         totalPrice += subtotal;
 
-        product.stock -= item.quantity;
-        if (product.stock <= 0) product.status = 'unavailable';
-        await product.save();
+        await meal.save();
 
-        return item;
+        return { meal: item.meal, quantity: Number(item.quantity) }; // ✅ Ensure quantity is a number
       }
     }),
   );
 
-  const userDetails = await User.findOne({ email: user.userEmail });
+  const userDetails = await User.findOne({ email: user.email });
+  console.log('user details', userDetails);
 
   const address = {
     address: userDetails?.address || payload?.address?.address || '',
@@ -59,10 +61,25 @@ const createOrder = async (
     phone: userDetails?.phone || payload?.address?.phone || '',
   };
 
+  console.log(address);
+
+  // let order = await OrderModel.create({
+  //   user: userDetails?._id,
+  //   meals: mealDetails,
+  //   totalPrice,
+  // });
+
+  const scheduledDelivery = payload.scheduledDelivery;
+
   let order = await OrderModel.create({
-    user: userDetails?._id,
-    products: productDetails,
+    customerId: userDetails?._id,
+    providerId: payload.providerId,
+    mealId: meals.map((item) => item.meal),
+    quantity: meals.map((item) => item.quantity),
     totalPrice,
+    address: address.address,
+    scheduledDelivery,
+    transaction: {},
   });
 
   // payment integration
@@ -130,7 +147,7 @@ const verifyPayment = async (order_id: string) => {
 // GET ALL ORDERS : ADMIN
 const getAllOrders = async (query: Record<string, unknown>) => {
   const orderQuery = new QueryBuilder(
-    OrderModel.find({}).populate('user').populate('products.product'),
+    OrderModel.find({}).populate('user').populate('meals.meal'),
     query,
   )
     .filter()
@@ -153,9 +170,7 @@ const getUserOrders = async (
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
   const userBookingQuery = new QueryBuilder(
-    OrderModel.find({ user: user._id })
-      .populate('user')
-      .populate('products.product'),
+    OrderModel.find({ user: user._id }).populate('user').populate('meals.meal'),
     query,
   )
     .filter()

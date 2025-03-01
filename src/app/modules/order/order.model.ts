@@ -18,7 +18,7 @@ const OrderSchema = new Schema<IOrder>(
       ref: 'User',
       required: true,
     },
-    quantity: { type: Number, required: true, default: 1 },
+    quantity: { type: [Number], required: true, default: [1] },
     dietaryPreferences: { type: [String], default: [] }, // Example: ['vegan', 'gluten-free']
     status: {
       type: String,

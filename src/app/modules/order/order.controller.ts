@@ -42,12 +42,6 @@ const verifyPayment = catchAsync(async (req, res) => {
 const getAllOrders = catchAsync(async (req, res) => {
   const newQuery = { ...req.query };
 
-  // modify the endTime field to filter the non returned bookings
-  if (req.query.endTime) {
-    delete newQuery.endTime;
-    newQuery.endTime = null as unknown as string;
-  }
-
   const { paginationMetaData, result } =
     await OrderService.getAllOrders(newQuery);
 
@@ -62,12 +56,6 @@ const getAllOrders = catchAsync(async (req, res) => {
 
 const getUserOrders = catchAsync(async (req, res) => {
   const newQuery = { ...req.query };
-
-  // modify the endTime field to filter the non returned bookings
-  if (req.query.endTime) {
-    delete newQuery.endTime;
-    newQuery.endTime = null as unknown as string;
-  }
 
   const { paginationMetaData, result } = await OrderService.getUserOrders(
     req.user!,
