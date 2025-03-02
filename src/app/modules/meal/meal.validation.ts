@@ -9,7 +9,7 @@ const CreateMealValidationSchema = z.object({
       .max(100, 'Meal name is too long'),
     description: z
       .string()
-      .min(5, 'Description should be at least 5 characters long'),
+      .min(2, 'Description should be at least 2 characters long'),
     ingredients: z
       .array(z.string().min(2, 'Ingredient name too short'))
       .nonempty('At least one ingredient required'),
@@ -24,7 +24,8 @@ const CreateMealValidationSchema = z.object({
     providerId: z
       .string()
       .min(24, 'Invalid provider ID')
-      .max(24, 'Invalid provider ID'), // Should be a valid MongoDB ObjectId
+      .max(24, 'Invalid provider ID')
+      .optional(), // Should be a valid MongoDB ObjectId
     availability: z.boolean().optional(), // Availability defaults to true in the model
     rating: z.number().min(0).max(5).optional(), // Rating between 0 and 5
   }),

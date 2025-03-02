@@ -14,7 +14,7 @@ const MealSchema = new Schema<IMeal>(
     providerId: {
       type: Schema.Types.ObjectId,
       ref: 'MealProvider',
-      required: true,
+      required: false,
     },
     availability: { type: Boolean, default: true },
     rating: { type: Number, min: 0, max: 5, default: 0 },

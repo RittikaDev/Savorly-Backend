@@ -9,9 +9,9 @@ import catchAsync from '../../utils/catchAsync';
 
 // CREATE A NEW MEAL MENU
 const createAMeal = catchAsync(async (req: Request, res: Response) => {
-  const { providerId } = req.params;
+  const { userId } = req.params;
   const mealData = req.body;
-  const result = await MealService.createMealMenu(providerId, mealData);
+  const result = await MealService.createMealMenu(userId, mealData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -22,7 +22,7 @@ router.get(
 router.get('/:userId/preffered', MealController.getPreferredMeals);
 
 router.post(
-  '/:providerId/create',
+  '/:userId/create',
   auth(USER_ROLE.provider),
   validateRequest(MealValidationSchema.CreateMealValidationSchema),
   MealController.createAMeal,
