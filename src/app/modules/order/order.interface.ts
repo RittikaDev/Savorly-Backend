@@ -6,6 +6,8 @@ export interface IOrder extends Document {
   providerId: Types.ObjectId;
   quantity: [number];
   dietaryPreferences?: string[]; // Example: ['vegan', 'gluten-free']
+  spiceLevel?: string[]; // Example: ['vegan', 'gluten-free']
+  extraSauce?: string[]; // Example: ['vegan', 'gluten-free']
   status: 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
   scheduledDelivery: Date;
   totalPrice: number;

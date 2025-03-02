@@ -24,6 +24,9 @@ const createOrder = async (
     };
     scheduledDelivery: Date;
     providerId: string;
+    dietaryPreferences?: string[];
+    spiceLevel?: string[];
+    extraSauce?: string[];
   },
   client_ip: string,
 ) => {
@@ -80,6 +83,9 @@ const createOrder = async (
     totalPrice,
     address: address.address,
     scheduledDelivery,
+    dietaryPreferences: payload.dietaryPreferences,
+    spiceLevel: payload.spiceLevel,
+    extraSauce: payload.extraSauce,
     transaction: {},
   });
 
@@ -114,6 +120,7 @@ const createOrder = async (
 };
 
 const verifyPayment = async (order_id: string) => {
+  console.log(order_id);
   const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
 
   // console.log(verifiedPayment);
@@ -142,6 +149,7 @@ const verifyPayment = async (order_id: string) => {
     );
   }
 
+  // console.log(verifiedPayment);
   return verifiedPayment;
 };
 

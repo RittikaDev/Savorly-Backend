@@ -19,7 +19,9 @@ const OrderSchema = new Schema<IOrder>(
       required: true,
     },
     quantity: { type: [Number], required: true, default: [1] },
-    dietaryPreferences: { type: [String], default: [] }, // Example: ['vegan', 'gluten-free']
+    dietaryPreferences: { type: [String], default: [] },
+    spiceLevel: { type: [String], default: [] },
+    extraSauce: { type: [String], default: [] },
     status: {
       type: String,
       enum: ['Pending', 'In progress', 'Delivered', 'Cancelled'],
