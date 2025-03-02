@@ -12,17 +12,17 @@ import { User } from '../user/user.model';
 
 // CREATE A NEW MEAL
 const createMealMenu = async (
-  providerId: string,
+  userId: string,
   mealData: IMeal,
 ): Promise<IMeal> => {
-  const providerExists = await MealProvider.findOne({ _id: providerId });
+  const providerExists = await MealProvider.findOne({ userId: userId });
 
   if (!providerExists)
     throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
 
   const result = await MealModel.create({
     ...mealData,
-    providerId: providerId,
+    providerId: providerExists._id,
   });
   return result;
 };
