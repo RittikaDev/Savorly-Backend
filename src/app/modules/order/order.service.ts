@@ -187,7 +187,7 @@ const getUserOrders = async (
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
   const userBookingQuery = new QueryBuilder(
-    OrderModel.find({ user: user._id })
+    OrderModel.find({ customerId: user._id })
       .populate('customerId')
       .populate('mealId'),
     query,
