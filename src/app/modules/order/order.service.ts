@@ -1,5 +1,3 @@
-import { CarModel } from '../car/car.model';
-
 import OrderModel from './order.model';
 import { orderUtils } from './order.utils';
 
@@ -228,14 +226,16 @@ const updateOrderStatus = async (
   orderId: string,
   providerId: string,
   status: OrderStatus,
-  deliveryDate: string,
+  deliveryDate?: string,
 ) => {
+  console.log(orderId);
   const validStatuses = ['Pending', 'In progress', 'Delivered', 'Cancelled'];
 
   if (!validStatuses.includes(status))
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid status');
 
   const order = await OrderModel.findById({ _id: orderId, providerId });
+  console.log(order);
 
   if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
 
