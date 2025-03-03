@@ -1,7 +1,5 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-// import { CarRoute } from './app/modules/car/car.route';
-// import { OrderRoute } from './app/modules/order/order.route';
 
 import router from './app/routes';
 
@@ -23,8 +21,6 @@ app.use(
 );
 
 // ROUTES
-// app.use('/api/cars', CarRoute);
-// app.use('/api/orders', OrderRoute);
 app.use('/api/', router);
 
 app.get('/', (req: Request, res: Response) => {

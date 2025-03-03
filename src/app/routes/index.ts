@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { CarRoute } from '../modules/car/car.route';
 import { OrderRoute } from '../modules/order/order.route';
 import { AuthRoutes } from '../modules/auth/auth.route';
 import { UserRoute } from '../modules/user/user.route';
@@ -25,10 +24,6 @@ const moduleRoutes = [
   {
     path: '/meal-preference',
     route: MealPreferenceRoute,
-  },
-  {
-    path: '/cars',
-    route: CarRoute,
   },
   {
     path: '/meals',

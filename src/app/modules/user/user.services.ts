@@ -7,7 +7,8 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status-codes';
 import { TUser, UserModel } from './user.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { searchableUsers } from '../car/car.constants';
+// import { searchableUsers } from '../car/car.constants';
+export const searchableUsers = ['name', 'email'];
 
 const changePassword = async (
   userData: JwtPayload,

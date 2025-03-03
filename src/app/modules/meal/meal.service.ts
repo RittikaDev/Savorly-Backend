@@ -102,7 +102,7 @@ const getProviderSpecificMeals = async (
   if (!providerExists)
     throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
 
-  const carQuery = new QueryBuilder(
+  const mealQuery = new QueryBuilder(
     MealModel.find({ providerId: providerExists._id }),
     query,
   )
@@ -112,10 +112,10 @@ const getProviderSpecificMeals = async (
     .fields()
     .search(searchableFields);
 
-  const result = await carQuery.modelQuery;
-  const paginationMetaData = await carQuery.countTotal();
+  const result = await mealQuery.modelQuery;
+  const paginationMetaData = await mealQuery.countTotal();
 
-  console.log(result);
+  // console.log(paginationMetaData);
 
   return { result, paginationMetaData };
 };
