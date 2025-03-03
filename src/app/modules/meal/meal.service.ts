@@ -33,8 +33,16 @@ const updateMealMenu = async (
   providerId: string,
   updatedData: Partial<IMeal>,
 ): Promise<IMeal | null> => {
+  const providerExists = await MealProvider.findOne({ userId: providerId });
+  console.log(providerExists, mealId, providerId);
+
+  if (!providerExists)
+    throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
   // Check if the meal exists and belongs to the provider
-  const meal = await MealModel.findOne({ _id: mealId, providerId });
+  const meal = await MealModel.findOne({
+    _id: mealId,
+    providerId: providerExists._id,
+  });
 
   if (!meal)
     throw new AppError(httpStatus.NOT_FOUND, 'Meal not found or unauthorized');
@@ -86,11 +94,16 @@ const getProviderSpecificMeals = async (
   providerData: JwtPayload,
   query: Record<string, unknown>,
 ) => {
+  console.log(providerData);
   const user = await User.findOne({ email: providerData.email });
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
+  const providerExists = await MealProvider.findOne({ userId: user._id });
+  if (!providerExists)
+    throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
+
   const carQuery = new QueryBuilder(
-    MealModel.find({ providerId: user._id }),
+    MealModel.find({ providerId: providerExists._id }),
     query,
   )
     .filter()
@@ -101,6 +114,8 @@ const getProviderSpecificMeals = async (
 
   const result = await carQuery.modelQuery;
   const paginationMetaData = await carQuery.countTotal();
+
+  console.log(result);
 
   return { result, paginationMetaData };
 };
