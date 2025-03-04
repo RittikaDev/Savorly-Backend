@@ -5,11 +5,14 @@ export const searchableFields = [
   'rating',
   'availability',
 ];
-export const preferredFields = [
+
+export const searchableFieldsForAllMeals = [
   'name',
   'cuisineType',
   'dietaryPreferences',
-  'portionSize',
+  'providerId',
+  'rating',
+  'availability',
 ];
 
 export const searchableUsers = ['name', 'email'];

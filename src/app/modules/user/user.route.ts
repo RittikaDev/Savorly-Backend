@@ -14,6 +14,7 @@ router.post(
   validateRequest(UserValidations.changePasswordValidationSchema),
   UserController.changePassword,
 );
+router.get('/all-providers', UserController.getAllProviders);
 
 router.patch(
   '/update-profile',

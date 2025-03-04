@@ -1,5 +1,8 @@
 import QueryBuilder from '../../builder/QueryBuilder';
-import { searchableFields } from './meal.constants';
+import {
+  searchableFields,
+  searchableFieldsForAllMeals,
+} from './meal.constants';
 import { IMeal } from './meal.interface';
 import { MealModel } from './meal.model';
 
@@ -92,7 +95,7 @@ const getAllMealsFromDB = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .search(searchableFields);
+    .search(searchableFieldsForAllMeals);
 
   const result = await carQuery.modelQuery;
   const paginationMetaData = await carQuery.countTotal();

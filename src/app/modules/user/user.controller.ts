@@ -26,6 +26,19 @@ const updateProfile = catchAsync(async (req, res) => {
   });
 });
 
+const getAllProviders = catchAsync(async (req, res) => {
+  const { paginationMetaData, result } = await UserService.getAllProviders(
+    req.query,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Cars retrieved successfully',
+    paginationMetaData,
+    data: result,
+  });
+});
 const getAllUsers = catchAsync(async (req, res) => {
   const { paginationMetaData, result } = await UserService.getAllUsers(
     req.query,
@@ -57,4 +70,5 @@ export const UserController = {
   changePassword,
   getAllUsers,
   manageUserStatus,
+  getAllProviders,
 };

@@ -7,6 +7,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status-codes';
 import { TUser, UserModel } from './user.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { MealProvider } from '../meal_provider/meal_provider.model';
 // import { searchableUsers } from '../car/car.constants';
 export const searchableUsers = ['name', 'email'];
 
@@ -88,6 +89,15 @@ const getAllUsers = async (query: Record<string, unknown>) => {
   return { result, paginationMetaData };
 };
 
+const getAllProviders = async (query: Record<string, unknown>) => {
+  const carQuery = new QueryBuilder(MealProvider.find({}), query);
+
+  const result = await carQuery.modelQuery;
+  const paginationMetaData = await carQuery.countTotal();
+
+  return { result, paginationMetaData };
+};
+
 // MANAGING USERS
 const manageUserStatus = async (
   id: string,
@@ -108,4 +118,6 @@ export const UserService = {
   updateProfile,
   getAllUsers,
   manageUserStatus,
+
+  getAllProviders,
 };
