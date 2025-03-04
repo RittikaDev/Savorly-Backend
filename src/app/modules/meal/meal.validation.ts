@@ -35,7 +35,7 @@ const CreateMealValidationSchema = z.object({
 const UpdateMealValidationSchema = z.object({
   body: z.object({
     name: z.string().min(2).max(100).optional(),
-    description: z.string().min(5).optional(),
+    description: z.string().min(2).optional(),
     ingredients: z.array(z.string().min(2)).optional(),
     portionSize: z.string().min(2).optional(),
     price: z.number().positive().optional(),

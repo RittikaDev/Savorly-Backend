@@ -12,10 +12,14 @@ import { User } from '../user/user.model';
 
 // CREATE A NEW MEAL
 const createMealMenu = async (
-  userId: string,
+  user: JwtPayload,
   mealData: IMeal,
 ): Promise<IMeal> => {
-  const providerExists = await MealProvider.findOne({ userId: userId });
+  const userDetails = await User.findOne({ email: user.email });
+
+  const providerExists = await MealProvider.findOne({
+    userId: userDetails?._id,
+  });
 
   if (!providerExists)
     throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
@@ -30,14 +34,21 @@ const createMealMenu = async (
 // UPDATE PROVIDER BASED MEAL
 const updateMealMenu = async (
   mealId: string,
-  providerId: string,
+  user: JwtPayload,
   updatedData: Partial<IMeal>,
 ): Promise<IMeal | null> => {
-  const providerExists = await MealProvider.findOne({ userId: providerId });
-  console.log(providerExists, mealId, providerId);
+  const userDetails = await User.findOne({ email: user.email });
+
+  const providerExists = await MealProvider.findOne({
+    userId: userDetails?._id,
+  });
 
   if (!providerExists)
     throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
+
+  // const providerExists = await MealProvider.findOne({ userId: providerId });
+  // console.log(providerExists, mealId, providerId);
+
   // Check if the meal exists and belongs to the provider
   const meal = await MealModel.findOne({
     _id: mealId,
@@ -173,7 +184,7 @@ const getDietaryPreference = async () => {
     { $project: { _id: 0, dietaryPreference: '$_id' } }, // Restructure output
   ]);
 
-  console.log('Diet Pre', uniqueDietaryPreferences);
+  // console.log('Diet Pre', uniqueDietaryPreferences);
 
   return {
     meta: { total: uniqueDietaryPreferences.length },

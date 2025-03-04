@@ -9,9 +9,13 @@ import catchAsync from '../../utils/catchAsync';
 
 // CREATE A NEW MEAL MENU
 const createAMeal = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  // const { userId } = req.params;
+
+  const user = req.user;
+
   const mealData = req.body;
-  const result = await MealService.createMealMenu(userId, mealData);
+  // const result = await MealService.createMealMenu(userId, mealData);
+  const result = await MealService.createMealMenu(user!, mealData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -22,8 +26,12 @@ const createAMeal = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateMealMenu = catchAsync(async (req: Request, res: Response) => {
-  const { mealId, providerId } = req.params;
+  // const { mealId, providerId } = req.params;
+  const user = req.user;
   const updateData = req.body;
+  const mealId = updateData._id;
+
+  // console.log(mealId, updateData);
 
   // AT LEAST HAS TO BE PROVIDED
   if (Object.keys(updateData).length === 0) {
@@ -36,11 +44,7 @@ const updateMealMenu = catchAsync(async (req: Request, res: Response) => {
     return;
   }
 
-  const result = await MealService.updateMealMenu(
-    mealId,
-    providerId,
-    updateData,
-  );
+  const result = await MealService.updateMealMenu(mealId, user!, updateData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

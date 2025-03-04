@@ -93,13 +93,13 @@ const cancelOrder = catchAsync(async (req, res) => {
   });
 });
 const updateOrderStatus = catchAsync(async (req, res) => {
-  const { orderId, providerId } = req.params;
-  const { status, deliveryDate } = req.body;
+  // const { orderId, providerId } = req.params;
+  const { _id, providerId, status, deliveryDate } = req.body;
 
   const parsedDeliveryDate = deliveryDate ? new Date(deliveryDate) : null;
 
   const updatedOrder = await OrderService.updateOrderStatus(
-    orderId,
+    _id,
     providerId,
     status,
     parsedDeliveryDate?.toString()!,

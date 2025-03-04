@@ -159,8 +159,15 @@ const getAllOrders = async (
   const user = await User.findOne({ email: providerData.email });
   if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found');
 
+  const providerExists = await MealProvider.findOne({
+    userId: user?._id,
+  });
+
+  if (!providerExists)
+    throw new AppError(httpStatus.NOT_FOUND, 'Provider does not exist');
+
   const orderQuery = new QueryBuilder(
-    OrderModel.find({ providerId: user._id })
+    OrderModel.find({ providerId: providerExists._id })
       .populate('customerId')
       .populate('mealId'),
     query,

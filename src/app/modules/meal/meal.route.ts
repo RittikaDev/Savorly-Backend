@@ -21,19 +21,6 @@ router.get(
 
 router.get('/:userId/preffered', MealController.getPreferredMeals);
 
-router.post(
-  '/:userId/create',
-  auth(USER_ROLE.provider),
-  validateRequest(MealValidationSchema.CreateMealValidationSchema),
-  MealController.createAMeal,
-);
-
-router.put(
-  '/:mealId/:providerId',
-  auth(USER_ROLE.provider),
-  validateRequest(MealValidationSchema.UpdateMealValidationSchema),
-  MealController.updateMealMenu,
-);
 router.delete(
   '/:mealId/:providerId',
   auth(USER_ROLE.provider),
