@@ -9,7 +9,7 @@ const OrderSchema = new Schema<IOrder>(
       required: true,
     },
     mealId: {
-      type: Schema.Types.ObjectId,
+      type: [Schema.Types.ObjectId],
       ref: 'Meal',
       required: true,
     },
@@ -27,7 +27,7 @@ const OrderSchema = new Schema<IOrder>(
       enum: ['Pending', 'In progress', 'Delivered', 'Cancelled'],
       default: 'Pending',
     },
-    scheduledDelivery: { type: Date, required: true },
+    scheduledDelivery: { type: String, required: true },
     totalPrice: { type: Number, required: true },
     address: { type: String, required: true },
     transaction: {

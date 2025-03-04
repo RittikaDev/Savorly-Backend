@@ -143,6 +143,14 @@ const verifyPayment = async (order_id: string) => {
               : verifiedPayment[0].bank_status == 'Cancel'
                 ? 'Cancelled'
                 : '',
+        isPaid:
+          verifiedPayment[0].bank_status == 'Success'
+            ? true
+            : verifiedPayment[0].bank_status == 'Failed'
+              ? false
+              : verifiedPayment[0].bank_status == 'Cancel'
+                ? false
+                : false,
       },
     );
   }

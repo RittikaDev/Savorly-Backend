@@ -10,7 +10,8 @@ const CreateOrderValidationSchema = z.object({
     status: z
       .enum(['Pending', 'In progress', 'Delivered', 'Cancelled'])
       .default('Pending'),
-    scheduledDelivery: z.coerce.date(), // Ensures it's a valid date
+    // scheduledDelivery: z.coerce.date(), // Ensures it's a valid date
+    scheduledDelivery: z.string(), // Ensures it's a valid date
     totalPrice: z.number().positive(),
     address: z.string().min(5, 'Address is required').optional(),
     transaction: z
@@ -41,7 +42,8 @@ const UpdateOrderValidationSchema = z.object({
     status: z
       .enum(['Pending', 'In progress', 'Delivered', 'Cancelled'])
       .optional(),
-    scheduledDelivery: z.coerce.date().optional(),
+    // scheduledDelivery: z.coerce.date().optional(),
+    scheduledDelivery: z.string().optional(),
     totalPrice: z.number().positive().optional(),
     address: z.string().min(5).optional(),
     transaction: z

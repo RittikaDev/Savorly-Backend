@@ -2,14 +2,14 @@ import { Document, Types } from 'mongoose';
 
 export interface IOrder extends Document {
   customerId: Types.ObjectId;
-  mealId: Types.ObjectId;
+  mealId: [Types.ObjectId];
   providerId: Types.ObjectId;
   quantity: [number];
   dietaryPreferences?: string[]; // Example: ['vegan', 'gluten-free']
   spiceLevel?: string[]; // Example: ['vegan', 'gluten-free']
   extraSauce?: string[]; // Example: ['vegan', 'gluten-free']
   status: 'Pending' | 'In progress' | 'Delivered' | 'Cancelled';
-  scheduledDelivery: Date;
+  scheduledDelivery: string;
   totalPrice: number;
   address: string;
   transaction?: {
